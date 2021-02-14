@@ -28,7 +28,7 @@ export class Alglib {
 		this.equality_constraint = []
 		this.inequality_constraint = []
 		this.callback = []
-		this.stat = ""
+		this.stat = [];
 		this.countEvals = 0
 		
 		// Create example data to test float_multiply_array
@@ -92,7 +92,7 @@ export class Alglib {
 		for(let i = 0; i < this.fxn.length; i++){
 			let newfunc = function f(){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
-				this.stat += "["+x.toString()+"]\n"
+				this.stat.push(x)
 				this.countEvals++
 				return this.fxn[i](x)
 			}
@@ -124,7 +124,7 @@ export class Alglib {
 		if(this.loaded == true){
 			
 			this.countEvals = 0
-			this.stat = ""
+			this.stat = []
 			this.mode = mode
 			this.minmax = 0
 			if(mode == "min"){this.minmax = 1}
@@ -201,7 +201,7 @@ export class Alglib {
 		\nThe final variable values were: ["+this.get_results()+"]\
 		\nNumber of function evaluations: "+this.countEvals+"\
 		\n\nIteration Report:\
-		\n"+this.stat+"\
+		\n"+this.stat.join("\n")+"\
 		\n"
 		return reportText
 	}
