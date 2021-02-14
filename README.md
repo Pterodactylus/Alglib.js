@@ -36,7 +36,6 @@ Alglib.js takes a vector of residual equations that are all equal to zero when t
 	
 	let solver = new Alglib()
 	solver.add_function(fn1) //Add the first equation to the solver.
-	//solver.add_callback(c1) //Add the callback to the solver.
 	solver.add_equality_constraint(feq1)
 	solver.add_less_than_or_equal_to_constraint(fneq1)
 	//solver.add_greater_than_or_equal_to_constraint(fneq1)
@@ -58,7 +57,7 @@ Alglib.js takes a vector of residual equations that are all equal to zero when t
 The Alglib class starts an instance of the Alglib optimizer.
 
 1. The `Alglib()` constructor method takes no inputs and creates a new Alglib instance.
-2. The `add_function(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of functions. Each of the function should return a residule. The residuals returned should equal zero at the solution point i.e. F(x) = 0.
-3. The `add_equality_constraint(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of functions. This callback function is run every time before a function evaluation. You can use it to print intermediate results.
-4. The `add_inequality_constraint(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of functions. This callback function is run every time before a function evaluation. You can use it to print intermediate results.
-5. The `solve(min_max, x_guess, x_scale(optional))` function requires an array `x_guess = [x1, x2, etc.. ]` that defines the optimizer starting point.
+2. The `add_function(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of parameters/variables. The function should return a single finite value to be optimized. You can only define a single optimization function.
+3. The `add_equality_constraint(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of parameters/variables. The constraint must be of the form Gi(x)=0. You can define as many of these as you want.
+4. The `add_inequality_constraint(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of parameters/variables. The constraint must be of the form Hi(x)<=0. You can define as many of these as you want.
+5. The `solve(min_max, x_guess, x_scale(optional))` function requires a string `min_max = "min" or "max"` an array `x_guess = [x1, x2, etc.. ]` that defines the optimizer starting point. The otimizer counts how many x_guess varibles there are and bases the number of varibles to optimize on that. x_scale is an optional scaling parameter to help the optimizer converge more quickly.
