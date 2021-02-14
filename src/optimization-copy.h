@@ -24,6 +24,7 @@ http://www.fsf.org/licensing/licenses
 #include "linalg.h"
 #include "alglibmisc.h"
 #include "solvers.h"
+#include <functional>
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -9394,6 +9395,12 @@ NOTES:
      Copyright 18.05.2015 by Bochkanov Sergey
 
 *************************************************************************/
+void minnsoptimize(minnsstate &state,
+	std::function<void(const real_1d_array &x, real_1d_array &fi, void *ptr)>,
+    //void (*fvec)(const real_1d_array &x, real_1d_array &fi, void *ptr),
+    void  (*rep)(const real_1d_array &x, double func, void *ptr) = NULL,
+    void *ptr = NULL,
+    const xparams _xparams = alglib::xdefault);
 void minnsoptimize(minnsstate &state,
     void (*fvec)(const real_1d_array &x, real_1d_array &fi, void *ptr),
     void  (*rep)(const real_1d_array &x, double func, void *ptr) = NULL,

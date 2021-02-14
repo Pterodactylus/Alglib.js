@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+
+<h2>Constrained Minimization Arbitrary Constraints</h2>
+<p>This is an example of the solution of constrained optimization using ALGLIB.js</p>
+
+<p>
+Let  \(x_1\) and \(x_2\) denote the intputs to a function \(f(x_1,x_2)\) where \[f(x_1,x_2) = 2*|x_0|+|x_1|.\]
+Subject to the equality: \[x_0=1\]
+Subject to the inequality: \[x_1>=-1\]</p>
+
+<textarea id="demo" rows="40" cols="170">
+</textarea>
+
+<script type="module">
+	import {Alglib} from '../Alglib-v1.0.0.js'
+
+	var fn1 = function(x){
+		//console.log(x)
+		return (2*Math.abs(x[0])+Math.abs(x[1]));
+	}
+	
+	var feq1 = function(x){
+		//The equality constraint must return Gi(x)=0
+		return x[0]-1;
+	}
+	
+	var fneq1 = function(x){
+		//The inequality constraint must always have the form Hi(x)<=0
+		return -x[1]-1;
+	}
+	
+	
+	let solver = new Alglib()
+	solver.add_function(fn1) //Add the first equation to the solver.
+	//solver.add_callback(c1) //Add the callback to the solver.
+	solver.add_equality_constraint(feq1)
+	solver.add_less_than_or_equal_to_constraint(fneq1)
+	//solver.add_greater_than_or_equal_to_constraint(fneq1)
+	
+	solver.promise.then(function(result) { 
+		var x_guess = [0.5,0.5] //Guess the initial values of the solution.
+		//var x_scale = [100,100] //Set the scale of the values in the function only positive values here.
+		var s = solver.solve("min", x_guess) //Solve the equation
+		//console.log(solver.get_results())
+		//console.log(solver.get_status())
+		//console.log(solver.get_report())
+		document.getElementById("demo").value = solver.get_report()
+		solver.remove() //required to free the memory in C++
+	})
+</script>
+</body>
+</html>
