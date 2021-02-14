@@ -8,6 +8,7 @@ export class Alglib {
 		this.inequality_constraint = []
 		this.callback = []
 		this.stat = [];
+		this.jacobian = [];
 		this.countEvals = 0
 		
 		// Create example data to test float_multiply_array
@@ -54,6 +55,9 @@ export class Alglib {
 	add_inequality_constraint(fn) {
 		this.inequality_constraint.push(fn)
 	}
+	add_jacobian(fn){
+		this.jacobian.push(fn)
+	}
 	// Method
 	add_callback(fn) {
 		this.callback.push(fn)
@@ -64,6 +68,7 @@ export class Alglib {
 		this.equality_constraint = []
 		this.inequality_constraint = []
 		this.callback = []
+		this.jacobian = []
 		
 	}
 	//Method
@@ -71,15 +76,30 @@ export class Alglib {
 		for(let i = 0; i < this.fxn.length; i++){
 			let newfunc = function f(){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
-				this.stat.push(x)
+				if(this.stat.length<10000){
+					let str = ""
+					for(let j=0; j< x.length; j++){
+						str += x[0].toExponential(5)+"\t"
+					}
+					this.stat.push(str)
+				}
 				this.countEvals++
 				return this.fxn[i](x)
 			}
 			this.instance.add_function(newfunc.bind(this));
 		}
+		for(let i = 0; i < this.jacobian.length; i++){
+			let newfunc = function f(j){
+				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
+				this.countEvals++
+				return this.jacobian[i](x,j)
+			}
+			this.instance.add_jacobian(newfunc.bind(this));
+		}
 		for(let i = 0; i < this.equality_constraint.length; i++){
 			let newfunc = function f(){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
+				this.countEvals++
 				return this.equality_constraint[i](x)
 			}
 			this.instance.add_equality_constraint(newfunc.bind(this));
@@ -87,6 +107,7 @@ export class Alglib {
 		for(let i = 0; i < this.inequality_constraint.length; i++){
 			let newfunc = function f(){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
+				this.countEvals++
 				return this.inequality_constraint[i](x)
 			}
 			this.instance.add_inequality_constraint(newfunc.bind(this));
@@ -94,16 +115,27 @@ export class Alglib {
 		for(let i = 0; i < this.callback.length; i++){
 			let newfunc = function f(evaluate_jacobians, new_evaluation_point){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
+				this.countEvals++
 				return this.callback[i](x, evaluate_jacobians, new_evaluation_point);
 			}
 			this.instance.add_callback(newfunc.bind(this));
 		}
 	}
-	solve(mode, xi, xs=[]) {
+	solve(mode, xi, xs=[], max_iterations=50000, penalty=50.0, radius=0.1, diffstep=0.000001, stop_threshold=0.00001) {
 		if(this.loaded == true){
+			const t0 = performance.now();
+			if(this.jacobian.length>0){
+				let jacobian_rows = 1+this.equality_constraint.length+this.inequality_constraint.length
+				if(jacobian_rows != this.jacobian.length){throw("Error: not enough jacobian functions defined. Define one for the optimization function and one for each constraint. Need "+jacobian_rows)}
+			}
 			
 			this.countEvals = 0
 			this.stat = []
+			let str = ""
+			for(let j=0; j< xi.length; j++){
+				str += "    x"+j+"\t\t"
+			}
+			this.stat.push(str)
 			this.mode = mode
 			this.minmax = 0
 			if(mode == "min"){this.minmax = 1}
@@ -129,12 +161,15 @@ export class Alglib {
 			}
 			this.instance.setup_x(this.dataHeap.byteOffset, this.varLength);
 			
-			this.instance.solve(this.minmax)
+			this.instance.solve(this.minmax, max_iterations, penalty, radius, diffstep, stop_threshold)
 			
 			let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength)
 			let normalArray = [].slice.call(x);
 			this.results = normalArray
 			this.termType = this.instance.get_status()
+			
+			const t1 = performance.now();
+			this.timing = "Call to optimizer took "+(t1 - t0)+" milliseconds.";
 			
 			return true
 		}
@@ -179,6 +214,7 @@ export class Alglib {
 		\nThe final value of the optimization function was f(x) = "+this.fxn[0](x)+"\
 		\nThe final variable values were: ["+this.get_results()+"]\
 		\nNumber of function evaluations: "+this.countEvals+"\
+		\n"+this.timing+"\
 		\n\nIteration Report:\
 		\n"+this.stat.join("\n")+"\
 		\n"

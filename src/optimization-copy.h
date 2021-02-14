@@ -9407,6 +9407,12 @@ void minnsoptimize(minnsstate &state,
     void *ptr = NULL,
     const xparams _xparams = alglib::xdefault);
 void minnsoptimize(minnsstate &state,
+	std::function<void(const real_1d_array &x, real_1d_array &fi, real_2d_array &jac, void *ptr)>,
+    //void  (*jac)(const real_1d_array &x, real_1d_array &fi, real_2d_array &jac, void *ptr),
+    void  (*rep)(const real_1d_array &x, double func, void *ptr) = NULL,
+    void *ptr = NULL,
+    const xparams _xparams = alglib::xdefault);
+void minnsoptimize(minnsstate &state,
     void  (*jac)(const real_1d_array &x, real_1d_array &fi, real_2d_array &jac, void *ptr),
     void  (*rep)(const real_1d_array &x, double func, void *ptr) = NULL,
     void *ptr = NULL,

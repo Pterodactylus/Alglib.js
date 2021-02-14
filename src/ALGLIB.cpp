@@ -18,6 +18,7 @@ class ALGLIBjs {
 	std::vector<val> callbackFn;
 	std::vector<val> equality_constraint;
 	std::vector<val> inequality_constraint;
+	std::vector<val> jacobian;
 	double* xArray;
 	int xArrayLen;
 	double* sArray;
@@ -41,13 +42,17 @@ class ALGLIBjs {
 	void add_inequality_constraint(val fn){
 		this->inequality_constraint.push_back(fn);
 	}
+	void add_jacobian(val fn){
+		this->jacobian.push_back(fn);
+	}
 	void reset(){
 		this->f.clear();
 		this->callbackFn.clear();
 		this->equality_constraint.clear();
 		this->inequality_constraint.clear();
+		this->jacobian.clear();
 	}
-	bool solve(int minmax){
+	bool solve(int minmax, int max_iterations, double penalty, double rad, double dx, double stopping_conditions){
 		
 		this->minmax = minmax;
 		//std::cout << this->minmax << std::endl;
@@ -70,11 +75,11 @@ class ALGLIBjs {
 		x0.setcontent(this->xArrayLen,xi);
 		//std::cout << this->xArrayLen << std::endl;
 		
-		double epsx = 0.00001;
-		double diffstep = 0.000001;
-		double radius = 0.1;
-		double rho = 50.0;
-		alglib::ae_int_t maxits = 0;
+		double epsx = stopping_conditions;
+		double diffstep = dx;
+		double radius = rad;
+		double rho = penalty;
+		alglib::ae_int_t maxits = max_iterations;
 		alglib::minnsstate state;
 		alglib::minnsreport rep;
 		alglib::real_1d_array x1;
@@ -89,7 +94,12 @@ class ALGLIBjs {
 		// * epsx=0.000001  stopping conditions
 		// * s=[1,1]        all variables have unit scale
 		//
-		alglib::minnscreatef(this->xArrayLen, x0, diffstep, state);
+		if(this->jacobian.size()>0){
+			alglib::minnscreate(this->xArrayLen, x0, state);
+		}
+		else{
+			alglib::minnscreatef(this->xArrayLen, x0, diffstep, state);
+		}
 		alglib::minnssetalgoags(state, radius, rho);
 		alglib::minnssetcond(state, epsx, maxits);
 		alglib::minnssetscale(state, s);
@@ -151,9 +161,15 @@ class ALGLIBjs {
 		//       you solve nonsmooth optimization problems. Visual inspection of
 		//       results is essential.
 		//
-		auto f2 = std::bind(ALGLIBjs::wrapper_f, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 		
-		alglib::minnsoptimize(state, f2);
+		if(this->jacobian.size()>0){
+			auto f2 = std::bind(ALGLIBjs::wrapper_jac, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+			alglib::minnsoptimize(state, f2);
+		}
+		else{
+			auto f2 = std::bind(ALGLIBjs::wrapper_vec, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+			alglib::minnsoptimize(state, f2);
+		}
 		alglib::minnsresults(state, x1, rep);
 		//std::cout << rep.terminationtype << std::endl;
 		this->terminationType = rep.terminationtype;
@@ -161,18 +177,28 @@ class ALGLIBjs {
 		
 		return true;
 	}
-	static void wrapper_f (ALGLIBjs *p, const alglib::real_1d_array &x, alglib::real_1d_array &fi, void *ptr)
+	
+	static void wrapper_jac (ALGLIBjs *p, const alglib::real_1d_array &x, alglib::real_1d_array &fi, real_2d_array &jac, void *ptr)
 	{
-	  p->nsfunc2_jac(x, fi, ptr);
+	  p->nsfunc2_vec(x, fi, ptr);
+	  p->nsfunc2_jac(jac);
 	}
-	virtual void  nsfunc2_jac(const alglib::real_1d_array &x, alglib::real_1d_array &fi, void *ptr)
+	virtual void  nsfunc2_jac(real_2d_array &jac)
 	{
-		// and Jacobian matrix J
-		//
-		//         [ df0/dx0   df0/dx1 ]
-		//     J = [ df1/dx0   df1/dx1 ]
-		//         [ df2/dx0   df2/dx1 ]
-		//
+		for(int i=0; i<this->jacobian.size(); i++){
+			for(int j=0; j<this->xArrayLen; j++){
+				jac[i][j] = this->jacobian[i](j).as<double>();
+			}
+		}
+	}
+	
+	static void wrapper_vec (ALGLIBjs *p, const alglib::real_1d_array &x, alglib::real_1d_array &fi, void *ptr)
+	{
+	  p->nsfunc2_vec(x, fi, ptr);
+	}
+	virtual void  nsfunc2_vec(const alglib::real_1d_array &x, alglib::real_1d_array &fi, void *ptr)
+	{
+		
 		int f_counter = 0;
 		for(int i=0; i<this->xArrayLen; i++){
 			this->xArray[i] = x[i];
@@ -215,6 +241,7 @@ EMSCRIPTEN_BINDINGS(my_class_example) {
 	.function("setup_x", &ALGLIBjs::setup_x)
 	.function("set_xs", &ALGLIBjs::set_xs)
     .function("add_function", &ALGLIBjs::add_function)
+	.function("add_jacobian", &ALGLIBjs::add_jacobian)
 	.function("add_callback", &ALGLIBjs::add_callback)
 	.function("add_equality_constraint", &ALGLIBjs::add_equality_constraint)
 	.function("add_inequality_constraint", &ALGLIBjs::add_inequality_constraint)

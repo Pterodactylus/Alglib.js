@@ -9,12 +9,19 @@
 </head>
 <body>
 
-<h2>Garden Fence Example</h2>
+<h2>Rectangle Maximization</h2>
 <p>This is an example of the solution of constrained optimization using ALGLIB.js</p>
-
+<img src="./img/ellipse.png">
 <p>
-Let  \(x\)  denotes the length of the side of the garden perpendicular to the rock wall and  \(y\)  denotes the length of the side parallel to the rock wall. Then the area of the garden is \[A = x*y.\] 
-We want to find the maximum possible area subject to the constraint that the total fencing is  100ft . The total amount of fencing used will be  \(2x+y\).  Therefore, the constraint equation is \[2x+y=100.\]</p>
+A rectangle is to be inscribed in the ellipse
+\[\frac{x^2}{4}+y^2=1\]
+
+Find the maximum area of the rectangle.<br\>
+
+Let  \(x\) and \(y\) denote the intputs to a maximization function \(f(x,y)\) describing the area of the rectangle where \[f(x,y) = 2x*2y.\]
+
+Subject to the equality: \[\frac{x^2}{4}+y^2-1=0\]
+</p>
 
 <textarea id="demo" rows="40" cols="170">
 </textarea>
@@ -23,25 +30,24 @@ We want to find the maximum possible area subject to the constraint that the tot
 	import {Alglib} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.0.0.js'
 	//import {Alglib} from '../Alglib-v1.0.0.js'
 
-	var fn1 = function(x){
-		//console.log("f("+x+") = "+(x[0]*x[1]))
-		return x[0]*x[1];
+	var fn = function(x){
+		return 4*x[0]*x[1];
 	}
 	
-	var feq1 = function(x){
+	var eq = function(x){
 		//The equality constraint must return Gi(x)=0
-		return 2*x[0]+x[1]-100;
+		return x[0]*x[0]/4+x[1]*x[1]-1;
 	}
 	
 	
 	let solver = new Alglib()
-	solver.add_function(fn1) //Add the first equation to the solver.
-	solver.add_equality_constraint(feq1)
+	solver.add_function(fn) //Add the first equation to the solver.
+	solver.add_equality_constraint(eq)
 	//solver.add_less_than_or_equal_to_constraint(fneq1)
 	//solver.add_greater_than_or_equal_to_constraint(fneq1)
 	
 	solver.promise.then(function(result) { 
-		var x_guess = [0.5,0.5] //Guess the initial values of the solution.
+		var x_guess = [1,1] //Guess the initial values of the solution.
 		//var x_scale = [100,100] //Set the scale of the values in the function only positive values here.
 		var s = solver.solve("max", x_guess) //Solve the equation
 		//console.log(solver.get_results())

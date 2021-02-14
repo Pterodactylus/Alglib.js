@@ -13554,6 +13554,50 @@ void minnsoptimize(minnsstate &state,
     alglib_impl::ae_state_clear(&_alglib_env_state);
 }
 
+void minnsoptimize(minnsstate &state,
+	std::function<void(const real_1d_array &x, real_1d_array &fi, real_2d_array &jac, void *ptr)> jac,
+    //void  (*jac)(const real_1d_array &x, real_1d_array &fi, real_2d_array &jac, void *ptr),
+    void  (*rep)(const real_1d_array &x, double func, void *ptr), 
+    void *ptr,
+    const xparams _xparams)
+{
+    jmp_buf _break_jump;
+    alglib_impl::ae_state _alglib_env_state;
+    alglib_impl::ae_state_init(&_alglib_env_state);
+    if( setjmp(_break_jump) )
+    {
+#if !defined(AE_NO_EXCEPTIONS)
+        _ALGLIB_CPP_EXCEPTION(_alglib_env_state.error_msg);
+#else
+        _ALGLIB_SET_ERROR_FLAG(_alglib_env_state.error_msg);
+        return;
+#endif
+    }
+    ae_state_set_break_jump(&_alglib_env_state, &_break_jump);
+    if( _xparams.flags!=0x0 )
+        ae_state_set_flags(&_alglib_env_state, _xparams.flags);
+    alglib_impl::ae_assert(jac!=NULL,  "ALGLIB: error in 'minnsoptimize()' (jac is NULL)", &_alglib_env_state);
+    while( alglib_impl::minnsiteration(state.c_ptr(), &_alglib_env_state) )
+    {
+        _ALGLIB_CALLBACK_EXCEPTION_GUARD_BEGIN
+                if( state.needfij )
+                {
+                    jac(state.x, state.fi, state.j, ptr);
+                    continue;
+                }
+        if( state.xupdated )
+        {
+            if( rep!=NULL )
+                rep(state.x, state.f, ptr);
+            continue;
+        }
+        goto lbl_no_callback;
+        _ALGLIB_CALLBACK_EXCEPTION_GUARD_END
+    lbl_no_callback:
+        alglib_impl::ae_assert(ae_false, "ALGLIB: error in 'minnsoptimize' (some derivatives were not provided?)", &_alglib_env_state);
+    }
+    alglib_impl::ae_state_clear(&_alglib_env_state);
+}
 
 void minnsoptimize(minnsstate &state,
     void  (*jac)(const real_1d_array &x, real_1d_array &fi, real_2d_array &jac, void *ptr),
