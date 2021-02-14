@@ -8,7 +8,7 @@ Visit our website at https://pterodactylus.github.io/Alglib.js/
 1. [Basic Constrained Minimization Example](https://pterodactylus.github.io/Alglib.js/example.html)
 2. [Garden Fence Area Maximization](https://pterodactylus.github.io/Alglib.js/garden_fence.html)
 3. [Rosenbrock Function](https://pterodactylus.github.io/Alglib.js/rosenbrock.html)
-4. [Ellipse Area](https://pterodactylus.github.io/Alglib.js/ellipse.html)
+4. [Ellipse Rectangle Area Maximization](https://pterodactylus.github.io/Alglib.js/ellipse.html)
 
 ## Installation
 You can install Alglib.js by including the Alglib.js file in your HTML or js code.
