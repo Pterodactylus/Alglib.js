@@ -40,6 +40,6 @@ $bdir/emsdk/upstream/emscripten/emmake make
 
 cat $cwd/ALGLIBHelper.js >> $bdir/alglib_helper/alglibjs.js
 
-cp --verbose $bdir/alglib_helper/alglibjs.js $cwd/Alglib-v1.0.0.js
+cp --verbose $bdir/alglib_helper/alglibjs.js $cwd/Alglib-v1.1.0.js
 
 

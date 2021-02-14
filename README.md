@@ -8,7 +8,7 @@ Visit our website at https://pterodactylus.github.io/Alglib.js/
 You can install Alglib.js by including the Alglib.js file in your HTML or js code.
 
 ```HTML
-<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.0.0.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.1.0.js"></script>
 ```
 
 ## Basic Example
@@ -16,7 +16,7 @@ Alglib.js takes a vector of residual equations that are all equal to zero when t
 
 ```html
 <script type="module">
-	import {Alglib} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.0.0.js'
+	import {Alglib} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.1.0.js'
 
 	var fn1 = function(x){
 		//The function to be optimized
