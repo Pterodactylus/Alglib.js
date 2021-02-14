@@ -1,5 +1,5 @@
 # ALGLIB.js
-Alglib.js a javascript port of the ALGLIB optimization tecniques. It supports Non-Linear Constrained Gradient Optimization problems. It is built off the ALGLIB numerical analysis and data processing library.
+Alglib.js a javascript port of the ALGLIB optimization tecniques. It supports Non-Linear Constrained Gradient Optimization problems. It is built off the ALGLIB numerical analysis and data processing library. The AGS solver used by us can handle nonsmooth and nonconvex optimization problems. It has convergence guarantees, i.e. it will converge to stationary point of the function after running for some time.
 
 ## Website
 Visit our website at https://pterodactylus.github.io/Alglib.js/
@@ -19,7 +19,7 @@ Alglib.js takes a vector of residual equations that are all equal to zero when t
 	import {Alglib} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.0.0.js'
 
 	var fn1 = function(x){
-		//console.log(x)
+		//The function to be optimized
 		return (2*Math.abs(x[0])+Math.abs(x[1]));
 	}
 	
@@ -57,7 +57,7 @@ Alglib.js takes a vector of residual equations that are all equal to zero when t
 ## Reference
 The Alglib class starts an instance of the Alglib optimizer.
 
-1. The `Alglib()` constructor method takes no inputs and creates a new Solver instance.
+1. The `Alglib()` constructor method takes no inputs and creates a new Alglib instance.
 2. The `add_function(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of functions. Each of the function should return a residule. The residuals returned should equal zero at the solution point i.e. F(x) = 0.
 3. The `add_equality_constraint(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of functions. This callback function is run every time before a function evaluation. You can use it to print intermediate results.
 4. The `add_inequality_constraint(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of functions. This callback function is run every time before a function evaluation. You can use it to print intermediate results.
