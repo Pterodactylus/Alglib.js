@@ -4,6 +4,12 @@ Alglib.js a javascript port of the ALGLIB optimization tecniques. It supports No
 ## Website
 Visit our website at https://pterodactylus.github.io/Alglib.js/
 
+## Examples
+[Basic Constrained Minimization Example](https://pterodactylus.github.io/Alglib.js/example.html)
+[Garden Fence Area Maximization](https://pterodactylus.github.io/Alglib.js/garden_fence.html)
+[Rosenbrock Function](https://pterodactylus.github.io/Alglib.js/rosenbrock.html)
+[Ellipse Area](https://pterodactylus.github.io/Alglib.js/ellipse.html)
+
 ## Installation
 You can install Alglib.js by including the Alglib.js file in your HTML or js code.
 
