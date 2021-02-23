@@ -13,7 +13,7 @@
 <p>This is an example of the solution of constrained optimization using ALGLIB.js</p>
 
 <p>
-Let  \(x\)  denotes the length of the side of the garden perpendicular to the rock wall and  \(y\)  denotes the length of the side parallel to the rock wall. Then the area of the garden is \[A = x*y.\] 
+Let  \(x\)  denote the length of the side of the garden perpendicular to the rock wall and \(y\) denote the length of the side parallel to the rock wall. Then the area of the garden is \[A = x*y.\] 
 We want to find the maximum possible area subject to the constraint that the total fencing is  100ft . The total amount of fencing used will be  \(2x+y\).  Therefore, the constraint equation is \[2x+y=100.\]</p>
 
 <textarea id="demo" rows="40" cols="170">
@@ -36,8 +36,8 @@ We want to find the maximum possible area subject to the constraint that the tot
 	
 	let solver = new Alglib()
 	solver.add_function(fn1) //Add the first equation to the solver.
-	solver.add_equality_constraint(feq1)
-	//solver.add_less_than_or_equal_to_constraint(fneq1)
+	//solver.add_equality_constraint(feq1)
+	solver.add_less_than_or_equal_to_constraint(feq1)
 	//solver.add_greater_than_or_equal_to_constraint(fneq1)
 	
 	solver.promise.then(function(result) { 

@@ -100,7 +100,7 @@ export class Alglib {
 				if(this.stat.length<10000){
 					let str = ""
 					for(let j=0; j< x.length; j++){
-						str += x[0].toExponential(5)+"\t"
+						str += x[j].toExponential(5)+"\t"
 					}
 					this.stat.push(str)
 				}
