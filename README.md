@@ -18,7 +18,9 @@ You can install Alglib.js by including the Alglib.js file in your HTML or js cod
 ```
 
 ## Basic Example
-Alglib.js takes a vector of residual equations that are all equal to zero when the problem is solved. The equations can be non-linear. Here is a basic example.
+Alglib.js maximizes or minimizes a function, F(x) subject to nonlinear equality constraints having the form Gi(x)=0, inequality ones have form Hi(x)<=0.
+We may have to re-arrange constraints prior to passing them to optimizer.
+Here is a basic example.
 
 ```html
 <script type="module">
