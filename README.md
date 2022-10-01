@@ -9,6 +9,7 @@ Visit our website at https://pterodactylus.github.io/Alglib.js/
 2. [Garden Fence Area Maximization](https://pterodactylus.github.io/Alglib.js/garden_fence.html)
 3. [Rosenbrock Function](https://pterodactylus.github.io/Alglib.js/rosenbrock.html)
 4. [Ellipse Rectangle Area Maximization](https://pterodactylus.github.io/Alglib.js/ellipse.html)
+5. [Cubic Spline Fitting](https://pterodactylus.github.io/Alglib.js/curve_fitting.html)
 
 ## Installation
 You can install Alglib.js by including the Alglib.js file in your HTML or js code.
