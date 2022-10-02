@@ -22,7 +22,7 @@ You can install Alglib.js by including the Alglib.js file in your HTML or js cod
 This is an example of the solution of constrained optimization using [Alglib.js](https://github.com/Pterodactylus/Alglib.js)
 
 ```js
-    import {Alglib} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.1.1.js'
+    import {Alglib} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.1.0.js'
     
     var solver = new Alglib()
     solver.promise.then(function(){

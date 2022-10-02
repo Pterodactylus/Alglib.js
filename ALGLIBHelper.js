@@ -123,10 +123,6 @@ export class Alglib {
 	}
 	solve(mode, xi=null, xs=[], max_iterations=50000, penalty=50.0, radius=0.1, diffstep=0.000001, stop_threshold=0.00001) {
 		if(this.loaded == true){
-		    if (xi==null){
-		        xi = Array.apply(null, Array(this.varLength)).map(function (x, i) { return 1; })
-		    }
-
 			const t0 = performance.now();
 			if(this.jacobian.length>0){
 				let jacobian_rows = 1+this.equality_constraint.length+this.inequality_constraint.length
