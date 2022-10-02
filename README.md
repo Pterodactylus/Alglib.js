@@ -18,7 +18,21 @@ You can install Alglib.js by including the Alglib.js file in your HTML or js cod
 <script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.1.0.js"></script>
 ```
 
-## Basic Example
+## Getting Started
+This is an example of the solution of constrained optimization using [Alglib.js](https://github.com/Pterodactylus/Alglib.js)
+
+```js
+    import {Alglib} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.1.1.js'
+    
+    var solver = new Alglib()
+    solver.promise.then(function(){
+        solver.add_function((x) => 5.0*(x[0]-1)*x[0] + 1.0) //x is an array of fxn inputs x[0], x[1]...
+      solver.solve("min", x_guess) //Solve the equation
+      console.log(solver.get_results())
+    })
+```
+
+## Advanced Example
 Alglib.js maximizes or minimizes a function, F(x) subject to nonlinear equality constraints having the form Gi(x)=0, inequality ones have form Hi(x)<=0.
 We may have to re-arrange constraints prior to passing them to optimizer.
 Here is a basic example.
