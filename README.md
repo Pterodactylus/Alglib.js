@@ -34,6 +34,8 @@ This is an example of minimizing a single function using [Alglib.js](https://git
 </script>
 ```
 
+x = [0.5000019063244416, -2.79564030550899e-7]
+
 ## Advanced Example
 Alglib.js maximizes or minimizes a function, F(x) subject to nonlinear equality constraints having the form Gi(x)=0, inequality ones have form Hi(x)<=0.
 We may have to re-arrange constraints prior to passing them to optimizer.
