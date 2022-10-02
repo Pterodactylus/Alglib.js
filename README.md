@@ -27,7 +27,7 @@ This is an example of the solution of constrained optimization using [Alglib.js]
     var solver = new Alglib()
     solver.promise.then(function(){
         solver.add_function((x) => 5.0*(x[0]-1)*x[0] + 1.0) //x is an array of fxn inputs x[0], x[1]...
-      solver.solve("min", x_guess) //Solve the equation
+      solver.solve("min") //Solve the equation
       console.log(solver.get_results())
     })
 ```
