@@ -19,7 +19,7 @@ You can install Alglib.js by including the Alglib.js file in your HTML or js cod
 ```
 
 ## Getting Started
-This is an example of the solution of constrained optimization using [Alglib.js](https://github.com/Pterodactylus/Alglib.js)
+This is an example of minimizing a single function using [Alglib.js](https://github.com/Pterodactylus/Alglib.js)
 
 ```html
 <script type="module">
