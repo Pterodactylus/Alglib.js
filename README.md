@@ -29,7 +29,7 @@ This is an example of minimizing a single function using [Alglib.js](https://git
     solver.promise.then(function(){
       solver.add_function((x) => 5.0*(x[0]-1)*x[0] + x[1]*x[1] + 1.0) //x is an array of fxn inputs x[0], x[1]...
       solver.solve("min", [1,1]) //Minimize the function
-      console.log(solver.get_results())
+      console.log(solver.get_results()) //Display the results in the console
     })
 </script>
 ```
