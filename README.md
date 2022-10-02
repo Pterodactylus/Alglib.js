@@ -14,7 +14,7 @@ Visit our website at https://pterodactylus.github.io/Alglib.js/
 ## Installation
 You can install Alglib.js by including the Alglib.js file in your HTML or js code.
 
-"https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.1.0.js"
+https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.1.0.js
 
 ## Getting Started
 This is an example of minimizing a single function using [Alglib.js](https://github.com/Pterodactylus/Alglib.js)
