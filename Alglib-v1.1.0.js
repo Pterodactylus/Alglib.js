@@ -142,7 +142,7 @@ export class Alglib {
 			this.instance.add_callback(newfunc.bind(this));
 		}
 	}
-	solve(mode, xi=null, xs=[], max_iterations=50000, penalty=50.0, radius=0.1, diffstep=0.000001, stop_threshold=0.00001) {
+	solve(mode, xi, xs=[], max_iterations=50000, penalty=50.0, radius=0.1, diffstep=0.000001, stop_threshold=0.00001) {
 		if(this.loaded == true){
 		    if (xi==null){
 		        let len_fxns = this.fxn.length
