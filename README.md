@@ -5,12 +5,11 @@ Alglib.js a javascript port of the ALGLIB optimization tecniques. It supports No
 Visit our website at https://pterodactylus.github.io/Alglib.js/
 
 ## Examples
-1. [Basic Constrained Minimization Example](https://pterodactylus.github.io/Alglib.js/example.html)
-2. [Garden Fence Area Maximization](https://pterodactylus.github.io/Alglib.js/garden_fence.html)
-3. [Rosenbrock Function](https://pterodactylus.github.io/Alglib.js/rosenbrock.html)
-4. [Ellipse Rectangle Area Maximization](https://pterodactylus.github.io/Alglib.js/ellipse.html)
-5. [Cubic Spline Fitting](https://pterodactylus.github.io/Alglib.js/curve_fitting.html)
-6. [Antoine Equation Converter](https://pterodactylus.github.io/Alglib.js/Antoine_Equation_Converter.html)
+1. [Garden Fence Area Maximization](https://pterodactylus.github.io/Alglib.js/garden_fence.html)
+2. [Rosenbrock Function](https://pterodactylus.github.io/Alglib.js/rosenbrock.html)
+3. [Ellipse Rectangle Area Maximization](https://pterodactylus.github.io/Alglib.js/ellipse.html)
+4. [Cubic Spline Fitting](https://pterodactylus.github.io/Alglib.js/curve_fitting.html)
+5. [Antoine Equation Converter](https://pterodactylus.github.io/Alglib.js/Antoine_Equation_Converter.html)
 
 ## Installation
 You can install Alglib.js by including the Alglib.js file in your HTML or js code.
