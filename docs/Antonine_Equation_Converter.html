@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antoine Equation Unit Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+
+        .converter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-chtml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/convert@4/dist/convert.prod.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.10.0/math.js" integrity="sha512-j6jB0IFY4zpIJkzHSoIRZph5pPpqCycOk8F/1CFAwjRCOdjYpelrOOVYCFomUYCqzOhFHzti/PHOJO6y/1gsQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <h1>Antoine Equation Unit Converter</h1>
+    <div class="converter-container">
+	<div class="rendered-form">
+	    <div class="">
+		<h2 access="false" id="control-6755733">Input</h2></div>
+	    <div class="formbuilder-select form-group field-formula_scale">
+		<label for="formula_scale" class="formbuilder-select-label">Formula Scale<span class="formbuilder-required">*</span></label>
+		<select onchange="compute()" class="form-control" name="formula_scale" id="formula_scale" required="required" aria-required="true">
+		    <option value="log" selected="true" id="formula_scale-0">Log (base 10)</option>
+		    <option value="ln" id="formula_scale-1">Ln (base e)</option>
+		</select>
+	    </div>
+	    <div class="formbuilder-select form-group field-pressure_unit">
+		<label for="pressure_unit" class="formbuilder-select-label">Pressure Unit<span class="formbuilder-required">*</span></label>
+		<select onchange="compute()" class="form-control" name="pressure_unit" id="pressure_unit" required="required" aria-required="true">
+		    <option selected="true" value="bar">bar</option>
+		    <option value="mmHg">mmHg</option>
+		    <option value="atm">atm</option>
+		    <option value="Pa">Pa</option>
+		    <option value="mmH2O">mmH2O</option>
+		    <option value="psi">psia</option>
+		    <option value="torr">torr</option>
+		</select>
+	    </div>
+	    <div class="formbuilder-number form-group field-antoine_a">
+		<label for="antoine_a" class="formbuilder-number-label">Antoine A<span class="formbuilder-required">*</span></label>
+		<input value="3.55959" onchange="compute()" type="number" class="form-control" name="antoine_a" access="false" id="antoine_a" required="required" aria-required="true">
+	    </div>
+	    <div class="formbuilder-number form-group field-antoine_b">
+		<label for="antoine_b" class="formbuilder-number-label">Antoine B<span class="formbuilder-required">*</span></label>
+		<input value="643.748" onchange="compute()" type="number" class="form-control" name="antoine_b" access="false" id="antoine_b" required="required" aria-required="true">
+	    </div>
+	    <div class="formbuilder-number form-group field-antoine_c">
+		<label for="antoine_c" class="formbuilder-number-label">Antoine C<span class="formbuilder-required">*</span></label>
+		<input value="-198.043" onchange="compute()" type="number" class="form-control" name="antoine_c" access="false" id="antoine_c" required="required" aria-required="true">
+	    </div>
+	    <div class="formbuilder-number form-group field-temperature_min">
+		<label for="temperature_min" class="formbuilder-number-label">Temperature Min<span class="formbuilder-required">*</span></label>
+		<input value="379" onchange="compute()" type="number" class="form-control" name="temperature_min" access="false" id="temperature_min" required="required" aria-required="true">
+	    </div>
+	    <div class="formbuilder-number form-group field-temperature_max">
+		<label for="temperature_max" class="formbuilder-number-label">Temperature Max<span class="formbuilder-required">*</span></label>
+		<input value="573" onchange="compute()" type="number" class="form-control" name="temperature_max" access="false" id="temperature_max" required="required" aria-required="true">
+	    </div>
+	    <div class="formbuilder-select form-group field-temperature_unit_result">
+		<label for="temperature_unit" class="formbuilder-select-label">Temperature Unit<span class="formbuilder-required">*</span></label>
+		<select onchange="compute()" class="form-control" name="temperature_unit" id="temperature_unit" access="false" required="required" aria-required="true">
+		    <option value="degC">°C</option>
+            	    <option value="degF">°F</option>
+            	    <option selected="true" value="K">°K</option>
+		</select>
+	    </div>
+	    <p id="eqn1">
+                
+            </p>
+            <p id="eqn1txt">
+               
+            </p>
+	    <div class="">
+		<h2 access="false" id="control-5182456">Output</h2></div>
+	    <div class="formbuilder-select form-group field-formula_scale_result">
+		<label for="formula_scale_result" class="formbuilder-select-label">Formula Scale<span class="formbuilder-required">*</span></label>
+		<select onchange="compute()" class="form-control" name="formula_scale_result" id="formula_scale_result" required="required" aria-required="true">
+		    <option value="log" selected="true" id="formula_scale_result-0">Log (base 10)</option>
+		    <option value="ln" id="formula_scale_result-1">Ln (base e)</option>
+		</select>
+	    </div>
+	    <div class="formbuilder-select form-group field-pressure_unit_result">
+		<label for="pressure_unit_result" class="formbuilder-select-label">Pressure Unit<span class="formbuilder-required">*</span></label>
+		<select onchange="compute()" class="form-control" name="pressure_unit_result" id="pressure_unit_result" required="required" aria-required="true">
+		    <option selected="true" value="bar">bar</option>
+		    <option value="mmHg">mmHg</option>
+		    <option value="atm">atm</option>
+		    <option value="Pa">Pa</option>
+		    <option value="mmH2O">mmH2O</option>
+		    <option value="psi">psia</option>
+		    <option value="torr">torr</option>
+		</select>
+	    </div>
+	    <div class="formbuilder-select form-group field-temperature_unit_result">
+		<label for="temperature_unit_result" class="formbuilder-select-label">Temperature Unit<span class="formbuilder-required">*</span></label>
+		<select onchange="compute()" class="form-control" name="temperature_unit_result" id="temperature_unit_result" access="false" required="required" aria-required="true">
+		    <option selected="true" value="degC">°C</option>
+            	    <option value="degF">°F</option>
+            	    <option value="K">°K</option>
+		</select>
+	    </div>
+	    <div class="">
+		<h1 access="false" id="control-9280756">Results</h1></div>
+	    <div style="width: 80%; margin: auto;">
+		<canvas id="scatterChart"></canvas>
+	    </div>
+	    <div class="formbuilder-number form-group field-antoine_a_result">
+		<label for="antoine_a_result" class="formbuilder-number-label">Antoine A</label>
+		<input disabled="true" type="number" class="form-control" name="antoine_a_result" access="false" id="antoine_a_result">
+	    </div>
+	    <div class="formbuilder-number form-group field-antoine_b_result">
+		<label for="antoine_b_result" class="formbuilder-number-label">Antoine B</label>
+		<input disabled="true" type="number" class="form-control" name="antoine_b_result" access="false" id="antoine_b_result">
+	    </div>
+	    <div class="formbuilder-number form-group field-antoine_c_result">
+		<label for="antoine_c_result" class="formbuilder-number-label">Antoine C</label>
+		<input disabled="true" type="number" class="form-control" name="antoine_c_result" access="false" id="antoine_c_result">
+	    </div>
+	    <div class="formbuilder-number form-group field-temperature_min">
+		<label for="temperature_min_result" class="formbuilder-number-label">Temperature Min</label>
+		<input disabled="true" type="number" class="form-control" name="temperature_min_result" access="false" id="temperature_min_result">
+	    </div>
+	    <div class="formbuilder-number form-group field-temperature_max">
+		<label for="temperature_max_result" class="formbuilder-number-label">Temperature Max</label>
+		<input disabled="true" type="number" class="form-control" name="temperature_max_result" access="false" id="temperature_max_result">
+	    </div>
+	    <p id="eqn2">
+                
+            </p>
+            <p id="eqn2txt">
+               
+            </p>
+	</div>
+    </div>
+    
+    <script>
+        // Sample data for scatterplot
+        var data = {
+            datasets: [
+                {
+                    label: 'Old P-T Points',
+                    data: [
+                        
+                    ],
+                    borderColor: 'red', // Line color
+                    backgroundColor: 'red', // Point color
+                    showLine: false, // Hide line for scatter plot
+                    pointRadius: 2 // Customize point size
+                },
+                {
+                    label: 'New Fitted P-T Curve',
+                    data: [
+                                                
+                    ],
+                    borderColor: 'green', // Line color
+                    backgroundColor: 'green', // Point color
+                    showLine: true, // Hide line for scatter plot
+                    pointRadius: 0 // Customize point size
+                }
+            ]
+        };
+
+        // Chart configuration
+        var config = {
+            type: 'scatter',
+            data: data,
+            options: {
+                scales: {
+                    x: {
+                    	title: {
+				display: true,
+				text: 'Temperature'
+			},
+                        type: 'linear', // X-axis scale type
+                        position: 'bottom'
+                    },
+                    y: {
+                    	title: {
+				display: true,
+				text: 'Pressure'
+			},
+                        type: 'linear', // Y-axis scale type
+                        position: 'left'
+                    }
+                }
+            }
+        };
+
+	function g(id){
+		return document.getElementById(id).value
+	}
+
+        // Create scatterplot
+        var scatterplot = new Chart(document.getElementById('scatterChart'), config);
+
+    	function compute() {
+    		import('https://cdn.jsdelivr.net/gh/Pterodactylus/Alglib.js@master/Alglib-v1.1.0.js')
+    		.then(function(moduleNamespace){
+	    		
+	    		function base2float(base){
+	    			if (base == "ln"){base = Math.E}
+	    			else{base = 10}
+	    			return base
+	    		}
+	    		
+	    		var in_base = base2float(document.getElementById('formula_scale').value);
+	    		var out_base = base2float(document.getElementById('formula_scale_result').value);
+	    		
+	    		
+	    		document.getElementById('eqn1').innerHTML = '\\( P = '+in_base+'^{A - \\frac{B}{T + C}} \\)';
+	    		document.getElementById('eqn1txt').innerHTML = `
+	    		  Where:<br>
+		          \\( P \\) is the vapor pressure in ${g('pressure_unit')}<br>
+		          \\( T \\) is the temperature in ${g('temperature_unit')}<br>
+		          \\( A, B, \\) and \\( C \\) are Antoine coefficients specific to the substance`
+		          
+		        document.getElementById('eqn2').innerHTML = '\\( P = '+out_base+'^{A - \\frac{B}{T + C}} \\)';
+	    		document.getElementById('eqn2txt').innerHTML = `
+	    		  Where:<br>
+		          \\( P \\) is the vapor pressure in ${g('pressure_unit_result')}<br>
+		          \\( T \\) is the temperature in ${g('temperature_unit_result')}<br>
+		          \\( A, B, \\) and \\( C \\) are Antoine coefficients specific to the substance`
+		        
+		        
+		        const a = parseFloat(document.getElementById('antoine_a').value);
+		        const b = parseFloat(document.getElementById('antoine_b').value);
+		        const c = parseFloat(document.getElementById('antoine_c').value);
+		        const Tmin = parseFloat(document.getElementById('temperature_min').value);
+		        const Tmax = parseFloat(document.getElementById('temperature_max').value);
+		        
+		        const Tmin_result = math.unit(Tmin, g('temperature_unit')).toNumber(g('temperature_unit_result'))
+		        const Tmax_result = math.unit(Tmax, g('temperature_unit')).toNumber(g('temperature_unit_result'))
+		        document.getElementById('temperature_min_result').value = Tmin_result
+		        document.getElementById('temperature_max_result').value = Tmax_result
+		        
+		        scatterplot.config.options.scales.y.title.text = `Pressure (${g('pressure_unit_result')})`
+		        scatterplot.config.options.scales.x.title.text = `Temperature (${g('temperature_unit_result')})`
+		        
+		        scatterplot.data.datasets[0].data = []
+		        var pt_data = []
+		        for(T=Tmin; T<Tmax; T=T+Math.abs(Tmax-Tmin)/30){
+		        	var calc_pressure =  Math.pow(in_base, a - b/(T+c))
+		        	Tconv = math.unit(T, g('temperature_unit')).toNumber(g('temperature_unit_result'))
+		        	calc_pressure_conv = math.unit(calc_pressure, g('pressure_unit')).toNumber(g('pressure_unit_result'))
+		        	pt_data.push([Tconv, calc_pressure_conv])
+		        	scatterplot.data.datasets[0].data.push({ x: Tconv, y: calc_pressure_conv });
+		        	//console.log(calc_pressure)
+		        }
+		        
+    			var f = function(a_n, T){
+    			  let x = Math.pow(out_base, a_n[0] - a_n[1]/(T+a_n[2]))
+    			  //console.log(x)
+    			  return x
+			  //return a_n[3]*Math.pow(x, 3)+a_n[2]*Math.pow(x, 2)+a_n[1]*Math.pow(x, 1)+a_n[0];
+			}
+		 
+			//let data = [[-3, 8], [1,3], [5,3], [9,8], [10,16]]
+			var fn1 = function(T){
+			    let sum = 0
+			    for (let i = 0; i < pt_data.length; ++i) {
+			    sum = sum + Math.pow(pt_data[i][1] - f(T, pt_data[i][0]), 2)
+			}
+			let sse = Math.sqrt(sum)
+			//console.log(sse)
+			return sse
+			}
+			
+			let solver = new moduleNamespace.Alglib()
+			solver.add_function(fn1) //Add the first equation to the solver.
+			
+			solver.promise.then(function(result) { 
+				var x_guess = [10,500,200] //Guess the initial values of the solution.
+				var s = solver.solve("min", x_guess) //Solve the equation
+				//Update the chart
+				let spline_data = []
+				let a=solver.get_results()
+				//console.log(a)
+				console.log(solver.get_status())
+				//console.log(solver.get_report())
+				for (const [key, value] of Object.entries(pt_data)) {
+				  let T = value[0];
+				  spline_data.push({x:T, y:f(a,T)})
+				}
+				
+				scatterplot.data.datasets[1].data = spline_data;
+
+				
+				solver.remove() //required to free the memory in C++
+				
+				document.getElementById('antoine_a_result').value = a[0]
+		        	document.getElementById('antoine_b_result').value = a[1]
+		        	document.getElementById('antoine_c_result').value = a[2]
+				
+				MathJax.typeset()
+    				scatterplot.update();
+			})
+			
+			
+		});
+    		
+    	}
+    </script>
+    
+</body>
+</html>
