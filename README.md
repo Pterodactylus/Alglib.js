@@ -10,6 +10,7 @@ Visit our website at https://pterodactylus.github.io/Alglib.js/
 3. [Rosenbrock Function](https://pterodactylus.github.io/Alglib.js/rosenbrock.html)
 4. [Ellipse Rectangle Area Maximization](https://pterodactylus.github.io/Alglib.js/ellipse.html)
 5. [Cubic Spline Fitting](https://pterodactylus.github.io/Alglib.js/curve_fitting.html)
+6. [Antoine Equation Converter](https://pterodactylus.github.io/Alglib.js/Antoine_Equation_Converter.html)
 
 ## Installation
 You can install Alglib.js by including the Alglib.js file in your HTML or js code.
